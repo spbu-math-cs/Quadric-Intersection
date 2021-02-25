@@ -7,7 +7,7 @@ from math import sqrt
 def build_quadratic_monoms_batch(points):
     monoms = []
     for i in range(points.size()[1]):
-        cur_monoms = point[:, i:] * point[:, i]
+        cur_monoms = points[:, i:] * points[:, i]
         monoms.append(cur_monoms)
     return torch.cat(monoms, dim=1)
 
@@ -52,8 +52,7 @@ class HSQuadricsModel(nn.Module):
         
         self.build_transitions()
         # self.coef_trans.requires_grad = True
-        
-        
+
     def build_transitions(self):
         """
         Build additional transition matrices
@@ -79,8 +78,7 @@ class HSQuadricsModel(nn.Module):
         self.coef_trans = torch.from_numpy(self.coef_trans)
     
         self.inds_trans = m.reshape((-1,))
-        
-    
+
     def forward(self, points, dist='dist2'):
         assert dist in ['dist2', 'dist2_full', 'dist1', 'dist0']
         q = build_quadratic_monoms_batch(points)
@@ -90,8 +88,7 @@ class HSQuadricsModel(nn.Module):
             return self.get_first_order_distances((q, points))
         if dist=='dist0':
             return abs(self.get_values((q, points)))
-        
-    
+
     def build_full_matrix(self):
         """
         Build simetric martices of quadratic parts
@@ -99,8 +96,7 @@ class HSQuadricsModel(nn.Module):
         coef_trans = self.coef_trans.to(self.q_coefs.device)
         m = (self.q_coefs*coef_trans)[self.inds_trans]
         return m.view((self.dim, self.dim, self.n_quadric))
-    
-    
+
     def get_values(self, points):
         """
         Compute the values of quadrics in the batch of points
@@ -111,8 +107,7 @@ class HSQuadricsModel(nn.Module):
         q_values = torch.matmul(q, self.q_coefs*coef_trans)
         l_values = torch.matmul(p, self.l_coefs)
         return q_values + l_values + self.free_coefs
-    
-    
+
     def get_gradients(self, points):
         """
         Compute the values of quadrics gradient in the batch of points
@@ -127,16 +122,14 @@ class HSQuadricsModel(nn.Module):
         q_grad = torch.matmul(p, m).permute((1, 0, 2))
         
         return q_grad + self.l_coefs.permute((1, 0)).unsqueeze(0)
-    
-    
+
     def get_stiefel_error(self):
         """
         Compute non-orthogonality error of the quadratic part
         """
         I = torch.eye(self.q_coefs.size()[1]).to(self.q_coefs.device)
         return torch.sum((torch.matmul(self.q_coefs.T, self.q_coefs) - I) ** 2)
-    
-    
+
     def get_first_order_distances(self, points):
         values = torch.abs(self.get_values(points))
         grad = torch.sum(self.get_gradients(points)**2, dim=2)
@@ -163,16 +156,14 @@ class HSQuadricsModel(nn.Module):
         grad = torch.sum(self.get_gradients(points)**2, dim=2)
         scores = torch.sqrt(grad/4 + values) - torch.sqrt(grad)/2
         return scores
-    
-    
+
     def save(self, path):
         m = self.build_full_matrix()
         params = {'quadratic' : m,
                  'linear' : self.l_coefs,
                  'free' : self.free_coefs}
         torch.save(params, path)
-    
-    
+
     def load(self, path):
         params = torch.load(path)
         self.dim = params['quadratic'].size()[0]
