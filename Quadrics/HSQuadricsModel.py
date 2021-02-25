@@ -29,24 +29,24 @@ class HSQuadricsModel(nn.Module):
         coefs_trans: matrix to convert normed q_coefs to real coefficients
     """
     
-    def __init__(self, n_quadric, dim=512):
+    def __init__(self, n_quadrics, dim=512):
         super(HSQuadricsModel, self).__init__()
         self.dim = dim
-        self.n_quadric = n_quadric
+        self.n_quadrics = n_quadrics
         
         #initialize quadratic coefficients
-        self.q_coefs =  torch.empty(self.dim*(self.dim-1)//2 + self.dim, n_quadric)
+        self.q_coefs =  torch.empty(self.dim * (self.dim-1) // 2 + self.dim, n_quadrics)
         self.q_coefs = torch.nn.init.orthogonal_(self.q_coefs)
         self.q_coefs.requires_grad = True
         self.q_coefs = nn.Parameter(self.q_coefs)
         
         #initialize linear coeficients
-        self.l_coefs = (2*torch.rand((self.dim, self.n_quadric)) - 1)
+        self.l_coefs = (2 * torch.rand((self.dim, self.n_quadrics)) - 1)
         self.l_coefs.requires_grad = True
         self.l_coefs = nn.Parameter(self.l_coefs)
         
         #initialize free coefficients
-        self.free_coefs = (2*torch.rand(1, self.n_quadric) - 1)
+        self.free_coefs = (2 * torch.rand(1, self.n_quadrics) - 1)
         self.free_coefs.requires_grad = True
         self.free_coefs = nn.Parameter(self.free_coefs)
         
@@ -95,7 +95,7 @@ class HSQuadricsModel(nn.Module):
         """
         coef_trans = self.coef_trans.to(self.q_coefs.device)
         m = (self.q_coefs*coef_trans)[self.inds_trans]
-        return m.view((self.dim, self.dim, self.n_quadric))
+        return m.view((self.dim, self.dim, self.n_quadrics))
 
     def get_values(self, points):
         """
@@ -167,8 +167,8 @@ class HSQuadricsModel(nn.Module):
     def load(self, path):
         params = torch.load(path)
         self.dim = params['quadratic'].size()[0]
-        self.n_quadric = params['quadratic'].size()[2]
-        q_coefs = torch.empty((self.dim*(self.dim-1)//2 + self.dim, self.n_quadric))
+        self.n_quadrics = params['quadratic'].size()[2]
+        q_coefs = torch.empty((self.dim*(self.dim-1)//2 + self.dim, self.n_quadrics))
         self.build_transitions()
         for i in range(self.dim):
             start = self.dim*i - i*(i-1)//2
