@@ -164,8 +164,8 @@ class HSQuadricsModel(nn.Module):
                  'free' : self.free_coefs}
         torch.save(params, path)
 
-    def load(self, path):
-        params = torch.load(path)
+    def load(self, path, **kwargs):
+        params = torch.load(path, **kwargs)
         self.dim = params['quadratic'].size()[0]
         self.n_quadrics = params['quadratic'].size()[2]
         q_coefs = torch.empty((self.dim*(self.dim-1)//2 + self.dim, self.n_quadrics))
@@ -184,4 +184,4 @@ class HSQuadricsModel(nn.Module):
         free_coefs.requires_grad = True
         self.q_coefs = nn.Parameter(q_coefs)
         self.l_coefs = nn.Parameter(l_coefs)
-        self.free_coefs = nn.Parameter(self.free_coefs)
+        self.free_coefs = nn.Parameter(free_coefs)
