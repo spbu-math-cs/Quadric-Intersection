@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 from quadrics.HSQuadricsModel import HSQuadricsModel
-from quadrics.PointsDataset import PointsDataset, build_quadratic_monoms
+from quadrics.dataset import PointsDataset, build_quadratic_monoms
 
 
 class Quadrics:
