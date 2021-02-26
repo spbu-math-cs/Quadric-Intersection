@@ -1,7 +1,5 @@
 import torch
-from torch.utils.data import Dataset
 from quadrics.HSQuadricsModel import HSQuadricsModel
-from quadrics.dataset import PointsDataset, build_quadratic_monoms
 
 
 class Quadrics:
@@ -36,3 +34,7 @@ class Quadrics:
         self.model = HSQuadricsModel(self.n_quadrics)
         self.model.load(path, map_location=self.device)
         self.n_quadrics = self.model.n_quadrics
+
+    def save(self, path):
+        assert self.model is not None
+        self.model.save(path)
