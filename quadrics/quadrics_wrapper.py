@@ -1,5 +1,6 @@
 import torch
 from quadrics.HSQuadricsModel import HSQuadricsModel
+from quadrics.trainer import Trainer
 
 
 class Quadrics:
@@ -38,3 +39,33 @@ class Quadrics:
     def save(self, path):
         assert self.model is not None
         self.model.save(path)
+
+    def fit(self, data,
+            n_epochs,
+            val_data=None,
+            batch_size=256,
+            learning_rate=0.1,
+            save_path=None,
+            log_path=None,
+            shuffle=True,
+            lam=1,
+            start_epoch=1,
+            ):
+        if self.model is not None:
+            assert self.model.dim == data.shape[1]
+        else:
+            self.model = HSQuadricsModel(self.n_quadrics, dim=data.shape[1])
+        trainer = Trainer(self.model,
+                          data,
+                          val_data=val_data,
+                          batch_size=batch_size,
+                          learning_rate=learning_rate,
+                          save_path=save_path,
+                          log_path=log_path,
+                          device=self.device,
+                          shuffle=shuffle,
+                          dist=self.dist,
+                          lam=lam,
+                          start_epoch=start_epoch
+                          )
+        trainer.train_loop(n_epochs)
