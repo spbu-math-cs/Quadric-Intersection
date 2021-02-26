@@ -88,14 +88,14 @@ class Trainer:
         self.start_epoch += n_epoch
 
     def validate(self):
-        loss_accum = 0
+        loss_accum = []
         with torch.no_grad():
             n = 0
             for n, x in enumerate(self.val_loader):
                 q, p = x
                 q = q.to(self.device)
                 p = p.to(self.device)
-                loss_accum.append(self.get_dists((q, p)).detach().cpu().item())
+                loss_accum.append(np.mean(self.get_dists((q, p)).detach().cpu().numpy()))
             mean_loss = np.mean(loss_accum)
             print('Mean val distance', mean_loss)
         return mean_loss

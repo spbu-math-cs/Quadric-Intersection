@@ -88,6 +88,8 @@ class HSQuadricsModel(nn.Module):
             return self.get_first_order_distances((q, points))
         if dist=='dist0':
             return abs(self.get_values((q, points)))
+        if dist=='dist2_full':
+            return self.get_second_order_distances_full((q, points))
 
     def build_full_matrix(self):
         """
