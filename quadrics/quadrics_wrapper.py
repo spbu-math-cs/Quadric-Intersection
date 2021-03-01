@@ -1,5 +1,5 @@
 import torch
-from quadrics.HSQuadricsModel import HSQuadricsModel
+from quadrics.model import HSQuadricsModel
 from quadrics.trainer import Trainer
 
 
