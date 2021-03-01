@@ -4,6 +4,13 @@ from quadrics.trainer import Trainer
 
 
 class Quadrics:
+    """
+    An interface to interact with quadrics
+    Parameters:
+        n_quadrics: number of quadrics
+        dist: type of distance used. Possible values: 'dist2', 'dist2_full', 'dist1', 'dist0'
+        device: device used. Posible values: 'cpu', 'gpu'
+    """
 
     def __init__(self, n_quadrics=100, dist='dist2', device='cpu'):
         assert dist in ['dist2', 'dist2_full', 'dist1', 'dist0']
@@ -21,6 +28,14 @@ class Quadrics:
             self.device = torch.device('cpu')
 
     def get_distances(self, point, dist=None):
+        """
+        Compute distance from point to quadrics
+        Parameters:
+            point: ndarray with point coordinates
+            dist: type of distance to use. If None the default distance from __init__ will be used
+        Returns:
+            ndarray with distances to each quadric
+        """
         assert dist in [None, 'dist2', 'dist2_full', 'dist1', 'dist0']
         assert self.model is not None
         assert len(point) == self.model.dim
@@ -51,6 +66,20 @@ class Quadrics:
             lam=1,
             start_epoch=1,
             ):
+        """
+        Fit quadrics. If there is a trained model, continue training
+        Parameters:
+            data: ndarray with data to train
+            n_epochs: number of epochs to train
+            val_data: None or ndarray with data for validation
+            batch_size: batch size
+            learning_rate: learning rate
+            save_path: path to save weights every epoch. '_{step_number}.pth' will be added. If None model will no be saved
+            log_path: path to text file to save log. If None no log will be saved
+            shuffle: If true will shuffle data befor training
+            lam: weidht of regularization term
+            start_epoch: number of starting epoch to correct loging
+        """
         if self.model is not None:
             assert self.model.dim == data.shape[1]
         else:
