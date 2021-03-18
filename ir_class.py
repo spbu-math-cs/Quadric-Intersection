@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def calculate_inv_dict(labels):
     """Returns dictionary {label: array of position}
     
@@ -192,7 +195,7 @@ class IrBigData():
         if not s_f:
             s_f_ = self.s_f_
         
-        for index, pair in tqdm(enumerate(self.pairs_true_)):
+        for index, pair in enumerate(self.pairs_true_):
             self.disturbed_distractors_.append(np.nonzero(self._distances[pair] <
                                                          self._distances_distractors[pair[0]])[0])
             condition_1 = np.all(self._distances[pair] > self._distances_distractors[pair[0]])
@@ -216,4 +219,3 @@ class IrBigData():
               (len(self.pairs_true_) - len(self.pairs_false_threshold_))/len(self.pairs_true_))
         print("id rate only distractors =", 
               (len(self.pairs_true_) - len(self.pairs_false_distractors_))/len(self.pairs_true_))
-
