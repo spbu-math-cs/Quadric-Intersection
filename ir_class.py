@@ -33,9 +33,7 @@ def manual_roc_score(arr, ds_issame, *fpr_arr):
 
     for f in fpr_arr:
         FP = int(np.sum(ds_issame == 0) * f)
-        print(FP)
         TP = search_for_fp_examples(sorted_issame, FP)
-        print(TP)
         answer.append(sorted_arr[-FP - TP])
     return answer
 
