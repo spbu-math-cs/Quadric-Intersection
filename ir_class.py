@@ -46,7 +46,7 @@ def similarity_transformed(data1, data2, feature1, feature2, alpha,
                             "multiplication", "sum", "sum_threshold",
                             "max_threshold", "min_threshold",
                             "max_threshold_below", "min_threshold_below"}
-    assert alpha in transformation_types
+    assert dist_type in transformation_types
     feature1_full = np.repeat(feature1, len(feature2)).reshape(
         (len(feature1), len(feature2)))
     if dist_type == "dot_product":
@@ -114,6 +114,8 @@ class IrBigData:
 
         protocol : str, either data_distractors_in_false_pairs,
                    data_distractors_no_false_pairs, data_no_distractors
+
+        alpha : float, parameter for similarity transformation
 
     Attributes
     ----------
