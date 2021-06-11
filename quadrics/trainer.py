@@ -62,7 +62,7 @@ class Trainer:
         self.optimizer.step()
 
     def train_epoch(self):
-        for points in tqdm(self.train_loader):
+        for points in self.train_loader:
             q, p = points
             q = q.to(self.device)
             p = p.to(self.device)
