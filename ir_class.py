@@ -33,7 +33,9 @@ def manual_roc_score(arr, ds_issame, *fpr_arr):
 
     for f in fpr_arr:
         FP = int(np.sum(ds_issame == 0) * f)
+        print(FP)
         TP = search_for_fp_examples(sorted_issame, FP)
+        print(TP)
         answer.append(sorted_arr[-FP - TP])
     return answer
 
@@ -115,8 +117,6 @@ class IrBigData:
         protocol : str, either data_distractors_in_false_pairs,
                    data_distractors_no_false_pairs, data_no_distractors
 
-        alpha : float, parameter for similarity transformation
-
     Attributes
     ----------
     s_f_ : float, threshold in distances corresponding to given fpr_threshold
@@ -172,7 +172,7 @@ class IrBigData:
         self.pairs_false_threshold_ = set()  # pairs with inner distanse > threshold
         self.pairs_false_distractors_ = set()  # pairs with with inner distanse > distance to some distractor
 
-    def final_func(self):
+    def main(self):
         self.inv_dict_ = calculate_inv_dict(self.labels)
         # get distances (similarity) between points
         self.get_distances_transformed(dist_type=self.params["dist_type"],
@@ -213,12 +213,11 @@ class IrBigData:
              [0 for i in range(len(self._distances_false))]))
 
     def check_dimension(self):
-        assert len(self.data) == len(self.data_features) == len(self.labels)
+        assert len(self.data) == len(self.labels)
         assert isinstance(self.data, np.ndarray)
-        if self.params["protocol"] == "no_distractors":
-            assert self.params["similarity_type"] == "dot_product"
-        if isinstance(self.distractors, np.ndarray):
-            assert len(self.distractors) == len(self.distractor_features)
+
+#         if isinstance(self.distractors, np.ndarray):
+#             assert len(self.distractors) == len(self.distractor_features)
 
     def ir_with_distractors(self, s_f=None, extra_info=True):
         CMT = 0
@@ -259,5 +258,3 @@ class IrBigData:
         print("id rate only distractors =",
               (len(self.pairs_true_) - len(
                   self.pairs_false_distractors_)) / len(self.pairs_true_))
-
-
