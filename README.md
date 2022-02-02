@@ -7,8 +7,8 @@ This repository contains a PyTroch implementation of the algorithm presented in 
 
 The examples folder contain Jupyter notebooks with the following examples:
 
-- 'Seam_line_example': a toy example of approximation of the tennis ball seam line using quadrics
-- 'ir_toy_example': TODO: write description
+- `Seam_line_example`: a toy example of approximation of the tennis ball seam line using quadrics
+- `ir_toy_example`: TODO: write description
 
 ## Prerequisites
 TODO: add requierements
