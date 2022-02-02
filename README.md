@@ -3,6 +3,13 @@
 This repository contains a PyTroch implementation of the algorithm presented in the paper Quadric hypersurface intersection for manifold learning in feature space
 [https://arxiv.org/abs/2102.06186](https://arxiv.org/abs/2102.06186)
 
+## Examples
+
+The examples folder contain Jupyter notebooks with the following examples:
+
+- 'Seam_line_example': a toy example of approximation of the tennis ball seam line using quadrics
+- 'ir_toy_example': TODO: write description
+
 ## Prerequisites
 TODO: add requierements
 
