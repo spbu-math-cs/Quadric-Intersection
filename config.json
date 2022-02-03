@@ -1,0 +1,23 @@
+{
+  "train_params":
+    "quadrics": {
+                  "n_points": "all",
+                  "n_quadrics": 300,
+                  "distance": "algebraic"
+                },
+    "OneClassSVM": {
+                  "n_points": 30000,
+                  "kernel": "poly",
+                  "degree": 3
+                   },
+    "PCA": {
+                  "n_components": 170,
+                  "n_points": "all"
+           },
+    "norms": {},
+  "test_params": {"normalize": 1},
+  "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],
+  "datasets_to_calculate": ["ms1m", "cplfw", "calfw", "megaface", "flickr"]
+  "models_dir": "./models/",
+  "features_dir": "./features"
+}
