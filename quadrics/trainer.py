@@ -21,7 +21,8 @@ class Trainer:
                  device=torch.device('cpu'),
                  shuffle=True,
                  dist='dist2',
-                 lam=1
+                 lam=1,
+                 vebrose=1,
                  ):
         assert dist in ['dist2', 'dist2_full', 'dist1', 'dist0']
         self.dist = dist
@@ -32,6 +33,7 @@ class Trainer:
         self.start_epoch = start_epoch
         self.device = device
         self.lam = lam
+        self.logger = Logger(start_epoch=start_epoch, print_every=vebrose)
         self.train_loader = DataLoader(PointsDataset(data),
                                        batch_size=self.batch_size,
                                        shuffle=shuffle)
@@ -70,12 +72,12 @@ class Trainer:
 
     def train_loop(self, n_epoch):
         for i in range(self.start_epoch, self.start_epoch + n_epoch):
-            print('Epoch ', i)
+            self.logger.print(f'Epoch {i}')
             self.train_epoch()
             if self.val_loader is not None:
                 mean_loss = self.validate()
             er = self.model.get_stiefel_error().cpu().item()
-            print('Orthonormal error:', er)
+            self.logger.print(f'Orthonormal error: {er}')
             if self.log_path is not None:
                 s = f'Epoch {i}:'
                 if self.val_loader is not None:
@@ -85,6 +87,7 @@ class Trainer:
                     file.write('\n' + s)
             if self.save_path is not None:
                 self.model.save(self.save_path + '_' + str(i) + '.pth')
+            self.logger.step()
         self.start_epoch += n_epoch
 
     def validate(self):
@@ -97,5 +100,19 @@ class Trainer:
                 p = p.to(self.device)
                 loss_accum.append(np.mean(self.get_dists((q, p)).detach().cpu().numpy()))
             mean_loss = np.mean(loss_accum)
-            print('Mean val distance', mean_loss)
+            self.logger.print('Mean val distance', mean_loss)
         return mean_loss
+
+    
+class Logger:
+    
+    def __init__(self, start_epoch=1, print_every=1):
+        self.cur_epoch = start_epoch
+        self.print_every = print_every
+        
+    def print(self, message):
+        if (self.cur_epoch % self.print_every) == 0:
+            print(message)
+            
+    def step(self):
+        self.cur_epoch += 1

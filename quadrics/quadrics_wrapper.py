@@ -65,6 +65,7 @@ class Quadrics:
             shuffle=True,
             lam=1,
             start_epoch=1,
+            vebrose=1,
             ):
         """
         Fit quadrics. If there is a trained model, continue training
@@ -95,6 +96,7 @@ class Quadrics:
                           shuffle=shuffle,
                           dist=self.dist,
                           lam=lam,
-                          start_epoch=start_epoch
+                          start_epoch=start_epoch,
+                          vebrose=vebrose,
                           )
         trainer.train_loop(n_epochs)
