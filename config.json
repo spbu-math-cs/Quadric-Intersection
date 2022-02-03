@@ -16,5 +16,8 @@
            },
     "norms": {},
   "test_params": {"normalize": 1},
-  "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"]
+  "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],
+  "datasets_to_calculate": ["ms1m", "cplfw", "calfw", "megaface", "flickr"]
+  "models_dir": "./models/",
+  "features_dir": "./features"
 }
