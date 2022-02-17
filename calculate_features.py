@@ -40,7 +40,7 @@ if __name__ == 'main':
     parser.add_argument("--methods",
                         nargs='+',
                         default=None,
-                        help='Set empty to calculateall methos from config file')
+                        help='Set empty to calculate all methods from config file')
     args = parser.parse_args()
 
     with open("config.json", "r") as read_file:

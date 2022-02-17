@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parser.add_argument("--methods",
                         nargs='+',
                         default=None,
-                        help='Set empty to calculateall methos from config file')
+                        help='Set empty to calculate all methods from config file')
     args = parser.parse_args()
 
     assert 'ms1m' in os.listdir('image_embeddings'), 'We train model on ms1m dataset!'
