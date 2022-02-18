@@ -5,6 +5,7 @@ from sklearn.preprocessing import normalize
 import pickle 
 import os
 import argparse
+import json
 
 
 def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
