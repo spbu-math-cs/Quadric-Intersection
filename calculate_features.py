@@ -5,6 +5,7 @@ from sklearn.preprocessing import normalize
 import pickle 
 import os
 import argparse
+import json
 
 
 def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
@@ -27,7 +28,7 @@ def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
         return np.linalg.norm(embs, axis=1)
 
     
-if __name__ == 'main':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--shuffle",
                         type=bool,
@@ -56,12 +57,8 @@ if __name__ == 'main':
         
     proportion_of_outliers = config_dict['proportion_of_outliers']
     n_experiments = config_dict['n_experiments']
-
-#     indices_full = np.arange(6000000)
-#     np.random.shuffle(indices_full)
     
     outliers = np.load('image_embeddings/cplfw_anime_outliers.npy')
-    
     emb_list = {ds: np.load('image_embeddings/'+ds+'.npy')
                 for ds in args.datasets}
     
@@ -69,6 +66,7 @@ if __name__ == 'main':
         n_emb_experiment = int(len(outliers) / proportion_of_outliers * n_experiments)
         emb_list = {key: value[np.random.choice(len(value), n_emb_experiment)]
                    for key, value in emb_list.items()}
+    emb_list['outliers'] = outliers
     
     for dataset_name, embeddings in emb_list.items():
         print('Calculate features for {} dataset'.format(dataset_name))
@@ -88,3 +86,4 @@ if __name__ == 'main':
         if 'norms' in args.methods:
             dist = get_dist(None, 'norms', embeddings, False)
             np.save(dir_dataset + '/norms_dist.npy', dist)
+

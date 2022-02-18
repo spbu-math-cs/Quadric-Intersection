@@ -25,7 +25,7 @@
   "test_params": {
                   "normalize": 1,
                   "n_experiments": 10,
-                  "proportion_of_outliers":0.01
+                  "proportion_of_outliers": 0.01
                   },
   "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],
   "datasets_to_calculate": ["megaface", "flickr"],
