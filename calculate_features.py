@@ -7,13 +7,9 @@ import os
 import argparse
 
 
-dir_models = 'models/'
-
-dir_distances = 'distances/'
-
-def get_dist(model, model_type, embs, normalize=True, extra_params=None):
+def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
     """Insert extra_params in the dictionary format"""
-    if normalize and model_type != 'norms':
+    if normalize_emb and model_type != 'norms':
         embs = normalize(embs)
 
     if model_type == 'quadrics':
@@ -28,36 +24,67 @@ def get_dist(model, model_type, embs, normalize=True, extra_params=None):
         emb_length = np.linalg.norm(emb_projected, axis=1)
         return - np.sqrt(1 - emb_length**2)
     if model_type == 'norms':
-        return np.sqrt(embs, axis=1)
+        return np.linalg.norm(embs, axis=1)
 
+    
 if __name__ == 'main':
     parser = argparse.ArgumentParser()
     parser.add_argument("--shuffle",
                         type=bool,
                         default=True,
-                        help='Set True for IR calculation, False for ood test')
+                        help='Set False for IR calculation, True for ood test')                        
+    parser.add_argument("--datasets",
+                        nargs='+',
+                        default=None,
+                        help='To use datasets from config file leave empty')
+    parser.add_argument("--methods",
+                        nargs='+',
+                        default=None,
+                        help='Set empty to calculate all methods from config file')
+    args = parser.parse_args()
 
-    os.mkdir('distances_to_models')
     with open("config.json", "r") as read_file:
-        config_dict = json.load(read_file)['test_params']
-        models = json.load(read_file)['models_to_calculate']
-        datasets = json.load(read_file)['datasets_to_calculate']
-    indices_full = np.random.shuffle(6000000)
-#     datasets_
+        config_file = json.load(read_file)
     
-    for embeddings in datasets:
-        if 'quadrics' in methods:
-            pass
-        if 'OneClassSVM' in methods:
-            clf = pickle.load(open(dir_models+'OneClassSVM.pickle', 'rb'))
-            dist = get_dist(clf, 'OneClassSVM', embeddings, config_dict['normalize'])
-            np.save(dir_distances+'OneClassSVM_dist.npy', dist)
-        if 'PCA' in methods:
-            clf = pickle.load(open(dir_models+'PCA.pickle', 'rb'))
-            dist = get_dist(clf, 'PCA', embeddings, config_dict['normalize'])
-            np.save(dir_distances+'PCA_dist.npy', dist
-        if 'norms'in methods:
-            dist = get_dist(None, 'norms', embeddings, False)
-            np.save(dir_distances+'norms_dist.npy', dist 
+    config_dict = config_file['test_params']
+    dir_models = config_file['models_dir']
+    dir_features = config_file["features_dir"]
+    if args.datasets is None:
+        args.datasets = config_file['datasets_to_calculate']
+    if args.methods is None:
+        args.methods = config_file['models_to_calculate']
+        
+    proportion_of_outliers = config_dict['proportion_of_outliers']
+    n_experiments = config_dict['n_experiments']
 
- 
+#     indices_full = np.arange(6000000)
+#     np.random.shuffle(indices_full)
+    
+    outliers = np.load('image_embeddings/cplfw_anime_outliers.npy')
+    
+    emb_list = {ds: np.load('image_embeddings/'+ds+'.npy')
+                for ds in args.datasets}
+    
+    if args.shuffle:
+        n_emb_experiment = int(len(outliers) / proportion_of_outliers * n_experiments)
+        emb_list = {key: value[np.random.choice(len(value), n_emb_experiment)]
+                   for key, value in emb_list.items()}
+    
+    for dataset_name, embeddings in emb_list.items():
+        print('Calculate features for {} dataset'.format(dataset_name))
+        dir_dataset = dir_features + '/' + dataset_name
+        if 'quadrics' in args.methods:
+            pass
+        if 'quadrics_alg' in args.methods:
+            pass
+        if 'OneClassSVM' in args.methods:
+            clf = pickle.load(open(dir_models + '/OneClassSVM.pickle', 'rb'))
+            dist = get_dist(clf, 'OneClassSVM', embeddings, config_dict['normalize'])
+            np.save(dir_dataset + '/OneClassSVM_dist.npy', dist)
+        if 'PCA' in args.methods:
+            clf = pickle.load(open(dir_models+'/PCA.pickle', 'rb'))
+            dist = get_dist(clf, 'PCA', embeddings, config_dict['normalize'])
+            np.save(dir_dataset + '/PCA_dist.npy', dist)
+        if 'norms' in args.methods:
+            dist = get_dist(None, 'norms', embeddings, False)
+            np.save(dir_dataset + '/norms_dist.npy', dist)

@@ -1,23 +1,34 @@
 {
   "train_params":
+    {
     "quadrics": {
                   "n_points": "all",
                   "n_quadrics": 300,
-                  "distance": "algebraic"
+                  "distance": "2-type"
+                },
+    "quadrics_algebraic": {
+                  "n_points": 80000,
+                  "n_quadrics": 100,
+                  "distance": "alg"
                 },
     "OneClassSVM": {
-                  "n_points": 30000,
+                  "n_points": 800,
                   "kernel": "poly",
                   "degree": 3
                    },
     "PCA": {
-                  "n_components": 170,
-                  "n_points": "all"
+                  "n_points": "all",
+                  "n_components": 170
            },
-    "norms": {},
-  "test_params": {"normalize": 1},
+    "norms": {}
+    },
+  "test_params": {
+                  "normalize": 1,
+                  "n_experiments": 10,
+                  "proportion_of_outliers":0.01
+                  },
   "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],
-  "datasets_to_calculate": ["ms1m", "cplfw", "calfw", "megaface", "flickr"]
-  "models_dir": "./models/",
+  "datasets_to_calculate": ["megaface", "flickr"],
+  "models_dir": "./models",
   "features_dir": "./features"
 }
