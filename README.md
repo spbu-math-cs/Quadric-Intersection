@@ -4,7 +4,16 @@ This repository contains a PyTroch implementation of the algorithm presented in 
 [https://arxiv.org/abs/2102.06186](https://arxiv.org/abs/2102.06186)
 
 ## Prerequisites
-TODO: add requierements
+
+You will need python 3.6+ and the following packages
+
+- `numpy`
+- `pytorch 1.7`
+- `sklearn 0.24.2` if you need kernel models
+- `matplotlib` for graphs plotting in notebooks with examples
+- `tqdm`
+- `scipy` for Seam_line_exaple notebook
+
 
 ## Quadric models
 
