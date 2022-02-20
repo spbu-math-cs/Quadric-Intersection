@@ -107,7 +107,7 @@ class IrBigData:
                           of shape (n_distractors_features, )
 
     parameters : dict of paramters:
-        similarity_type : str, can be one of two values: dot_product, features
+        similarity_type : str, can be one of two values: cosine, features
 
         fpr_threshold : float, false positive rate for IR calculation
 
@@ -141,12 +141,12 @@ class IrBigData:
         self.distractors = distractors
         self.distractor_features = distractor_features
         self.check_dimension()
+        self._print_info = True
 
-    def get_distances_transformed(self, dist_type="dot_product",
-                                  alpha=None):
+    def get_distances_transformed(self, alpha=None):
         if not alpha:
             alpha = self.params["alpha"]
-        if self.params["similarity_type"] == "dot_product":
+        if self.params["similarity_type"] == "cosine":
             # distances here are scalar products
             self._distances = np.dot(self.data, self.data.T)
             if isinstance(self.distractors, np.ndarray):
@@ -172,19 +172,6 @@ class IrBigData:
         self.pairs_false_threshold_ = set()  # pairs with inner distanse > threshold
         self.pairs_false_distractors_ = set()  # pairs with with inner distanse > distance to some distractor
 
-    def main(self):
-        self.inv_dict_ = calculate_inv_dict(self.labels)
-        # get distances (similarity) between points
-        self.get_distances_transformed(dist_type=self.params["dist_type"],
-                                       alpha=self.params["alpha"])
-        self.prepare_pairs()
-        # manually calculate threshold s_f_
-        self.s_f_ = manual_roc_score(
-            np.hstack((self._distances_true, self._distances_false)),
-            self._ds_issame, self.params["fpr_threshold"])[0]
-        self.ir_with_distractors()
-        self.print_info()
-
     def prepare_pairs(self):
         self.pairs_true_ = []
         # compose true pairs
@@ -203,7 +190,7 @@ class IrBigData:
         distances_extra = distances_extra.flatten()
         self._distances_false = distances_extra[distances_extra != 0]
 
-        # add distractors in flase pairs
+        # add distractors to false pairs
         if self.params['protocol'] == 'data_distractors_in_false_pairs':
             self._distances_false = np.hstack(
                 (self._distances_false, self._distances_distractors.flatten()))
@@ -215,9 +202,6 @@ class IrBigData:
     def check_dimension(self):
         assert len(self.data) == len(self.labels)
         assert isinstance(self.data, np.ndarray)
-
-#         if isinstance(self.distractors, np.ndarray):
-#             assert len(self.distractors) == len(self.distractor_features)
 
     def ir_with_distractors(self, s_f=None, extra_info=True):
         CMT = 0
@@ -249,12 +233,25 @@ class IrBigData:
                                                               pair[0]]
         CMT /= len(self.pairs_true_)
         self.CMT_ = CMT
+        self.VR_ = (len(self.pairs_true_) - len(self.pairs_false_threshold_)) / len(self.pairs_true_
 
     def print_info(self):
         print("id rate =", self.CMT_)
-        print("id rate no distractors =",
-              (len(self.pairs_true_) - len(self.pairs_false_threshold_)) / len(
-                  self.pairs_true_))
+        print("id rate no distractors =", self.VR_)
         print("id rate only distractors =",
               (len(self.pairs_true_) - len(
                   self.pairs_false_distractors_)) / len(self.pairs_true_))
+
+    def main(self):
+        self.inv_dict_ = calculate_inv_dict(self.labels)
+        # get distances (similarity) between points
+        self.get_distances_transformed(dist_type=self.params["dist_type"],
+                                       alpha=self.params["alpha"])
+        self.prepare_pairs()
+        # manually calculate threshold s_f_
+        self.s_f_ = manual_roc_score(
+            np.hstack((self._distances_true, self._distances_false)),
+            self._ds_issame, self.params["fpr_threshold"])[0]
+        self.ir_with_distractors()
+        if self._print_info:
+            self.print_info()
