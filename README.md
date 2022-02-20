@@ -30,7 +30,15 @@ The examples folder contain Jupyter notebooks with the following examples:
 - `ir_toy_example`: TODO: write description
 
 ## Data
+Out-of-disttribution 
+For downloading dataset embeddings follow the next link and put file to the project folder:
+- https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing
+To extract archive and to prepare folders for future calculation executet ext file:
 TODO: write about datasets
+      link to initial datasets
+      few words about network
+      .sh file for extracting tar.gz file, folders for models and features 
+      in 
 
 ## Citation
 ```
