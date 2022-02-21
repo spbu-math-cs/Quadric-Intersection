@@ -13,6 +13,7 @@ You will need python 3.6+ and the following packages
 - `matplotlib` for graphs plotting in notebooks with examples
 - `tqdm`
 - `scipy` for Seam_line_exaple notebook
+- `pandas` for tables building
 
 
 ## Quadric models
@@ -27,10 +28,26 @@ You will need python 3.6+ and the following packages
 The examples folder contain Jupyter notebooks with the following examples:
 
 - `Seam_line_example`: a toy example of approximation of the tennis ball seam line using quadrics
-- `ir_toy_example`: TODO: write description
+- `IR_full`: identification rate calculation for cplfw dataset with megaface distractors, with different methods features extraction
+- `ood_test`: out-of-distribution test, find distance between of outliers and given datasets features distribution in roc-auc score metric
 
 ## Data
-TODO: write about datasets
+For downloading dataset embeddings follow the next link and put file to the project folder:
+[Embeddings Archive](https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing)
+This archive contains resnet-50 network with ArcFace loss embeedings for given datasets:
+
+- `MS1M-ArcFace`
+- `megaface`
+- `cplfw`
+- `calfw`
+- `flickr`
+- `cplfw outliers and anime pictures`
+
+which you may find there: [Image Datasets](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you may find them in file `labels/cplfw_outliers_labels.json`, notation corresponds to `labels/cplfw_labels_full.txt`) and anime images.
+
+To extract archive and to prepare folders for future calculation execute .sh file:
+
+- `./prepare_folders.sh`
 
 ## Citation
 ```

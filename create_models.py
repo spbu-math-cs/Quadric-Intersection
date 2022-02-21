@@ -16,8 +16,6 @@ if __name__ == '__main__':
                         default=['OneClassSVM', 'PCA'],
                         help='Set empty to calculate all methods from config file') 
     args = parser.parse_args()
-
-    assert 'ms1m.npy' in os.listdir('image_embeddings'), 'We train model on ms1m dataset!'
     
     # we use embeddings normalization for training
     print('Loading embeddings and config')
