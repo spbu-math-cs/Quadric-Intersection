@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument("--methods",
                         nargs='+',
                         default=['OneClassSVM', 'PCA'],
-                        help='Set empty to calculate all methods from config file') 
+                        help='Set empty to calculate OneClassSVM and PCA methods from config file') 
     args = parser.parse_args()
     
     # we use embeddings normalization for training
