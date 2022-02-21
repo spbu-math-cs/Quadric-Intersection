@@ -39,7 +39,7 @@ To extract archive and to prepare folders for future calculation execute next fi
 
 - `./prepare_folders.sh`
 
-Initial images dataset you may find there: (https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). To get final embeddings resnet-50 nettwork with ArcFace loss was used. For ood tests we provide embeddings datatset of  Also, in `image_embeddings/labels/cplfw_outliers_labels.json` you may find cplfw outliers images detected by eyes. 
+Initial images dataset you may find there: [GitHub Pages](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). To get final embeddings resnet-50 nettwork with ArcFace loss was used. For ood tests we provide embeddings datatset of  Also, in `image_embeddings/labels/cplfw_outliers_labels.json` you may find cplfw outliers images detected by eyes. 
 
 ## Citation
 ```
