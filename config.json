@@ -4,7 +4,9 @@
     "quadrics": {
                   "n_points": "all",
                   "n_quadrics": 300,
-                  "distance": "2-type"
+                  "distance": "dist2",
+                  "lr": 0.1,
+                  "n_epoch": 50
                 },
     "quadrics_algebraic": {
                   "n_points": 80000,
