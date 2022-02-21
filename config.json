@@ -33,7 +33,7 @@
     },
   "test_params": {
                   "normalize": 1,
-                  "n_experiments":5,
+                  "n_experiments": 20,
                   "proportion_of_outliers": 0.01
                   },
   "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],

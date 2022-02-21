@@ -43,7 +43,7 @@ This archive contains resnet-50 network with ArcFace loss embeedings for given d
 - `flickr`
 - `cplfw outliers and anime pictures`
 
-which you may find there: [Image Datasets](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you may find them in file `labels/cplfw_outliers_labels.json`, notation corresponds to `labels/cplfw_labels_full.txt`) and anime images.
+which you may find there: [Image Datasets](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you may find them in file `labels/cplfw_outliers_labels.json`, notation corresponds to `labels/cplfw_labels_full.txt`) and anime faces [Anime-face-dataset](https://github.com/bchao1/Anime-Face-Dataset).
 
 To extract archive and to prepare folders for future calculation execute .sh file:
 

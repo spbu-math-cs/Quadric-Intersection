@@ -30,16 +30,16 @@ def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
     if model_type == 'quadrics':
         pass
     if model_type == 'OneClassSVM':
-        return model.score_samples(embs)
+        return - model.score_samples(embs)
     if model_type == 'KPCA':
         return None
     if model_type == 'PCA':
         # use '-' for roc_auc_score function
         emb_projected = np.dot(embs, model.components_.T)
         emb_length = np.linalg.norm(emb_projected, axis=1)
-        return - np.sqrt(1 - emb_length**2)
+        return np.sqrt(1 - emb_length**2)
     if model_type == 'norms':
-        return np.linalg.norm(embs, axis=1)
+        return - np.linalg.norm(embs, axis=1)
 
     
 if __name__ == '__main__':
@@ -76,11 +76,11 @@ if __name__ == '__main__':
                 for ds in args.datasets}
     
     if args.shuffle:
+        if 'cplfw' in emb_list.keys():
+            emb_list['cplfw'] = preprocess_cplfw(emb_list['cplfw'])
         n_emb_experiment = int(len(outliers) / proportion_of_outliers * n_experiments)
         emb_list = {key: value[np.random.choice(len(value), n_emb_experiment)]
                    for key, value in emb_list.items()}
-        if 'cplfw' in emb_list.keys():
-            emb_list['cplfw'] = preprocess_cplfw(emb_list['cplfw'])
     
     emb_list['outliers'] = outliers
     
