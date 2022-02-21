@@ -12,7 +12,7 @@ You will need python 3.6+ and the following packages
 - `sklearn 0.24.2` if you need kernel models
 - `matplotlib` for graphs plotting in notebooks with examples
 - `tqdm`
-- `scipy` for Seam_line_exaple notebook
+- `scipy` for Seam_line_exapmle notebook
 - `pandas` for tables building
 
 
