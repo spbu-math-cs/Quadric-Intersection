@@ -15,8 +15,6 @@ if __name__ == '__main__':
                         default=None,
                         help='Set empty to calculate all methods from config file')
     args = parser.parse_args()
-
-    assert 'ms1m' in os.listdir('image_embeddings'), 'We train model on ms1m dataset!'
     
     # we use embeddings normalization for training
     embeddings = normalize(np.load('image_embeddings/ms1m.npy')) 

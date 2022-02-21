@@ -1,6 +1,5 @@
 import numpy as np
 import itertools
-from tqdm import tqdm
 
 
 def calculate_inv_dict(labels):
@@ -33,9 +32,7 @@ def manual_roc_score(arr, ds_issame, *fpr_arr):
 
     for f in fpr_arr:
         FP = int(np.sum(ds_issame == 0) * f)
-        print(FP)
         TP = search_for_fp_examples(sorted_issame, FP)
-        print(TP)
         answer.append(sorted_arr[-FP - TP])
     return answer
 
@@ -106,8 +103,8 @@ class IrBigData:
     distractor_features : ndarray of distractors features
                           of shape (n_distractors_features, )
 
-    parameters : dict of paramters:
-        similarity_type : str, can be one of two values: dot_product, features
+    params : dict of paramters:
+        similarity_type : str, can be one of two values: cosine, features
 
         fpr_threshold : float, false positive rate for IR calculation
 
@@ -131,6 +128,7 @@ class IrBigData:
     CMT_ : float, calculated identification rate
 
     """
+    _print_info = True
 
     def __init__(self, data, data_features, labels, parameters,
                  distractors=None, distractor_features=None):
@@ -142,11 +140,10 @@ class IrBigData:
         self.distractor_features = distractor_features
         self.check_dimension()
 
-    def get_distances_transformed(self, dist_type="dot_product",
-                                  alpha=None):
+    def get_distances_transformed(self, alpha=None):
         if not alpha:
             alpha = self.params["alpha"]
-        if self.params["similarity_type"] == "dot_product":
+        if self.params["similarity_type"] == "cosine":
             # distances here are scalar products
             self._distances = np.dot(self.data, self.data.T)
             if isinstance(self.distractors, np.ndarray):
@@ -172,19 +169,6 @@ class IrBigData:
         self.pairs_false_threshold_ = set()  # pairs with inner distanse > threshold
         self.pairs_false_distractors_ = set()  # pairs with with inner distanse > distance to some distractor
 
-    def main(self):
-        self.inv_dict_ = calculate_inv_dict(self.labels)
-        # get distances (similarity) between points
-        self.get_distances_transformed(dist_type=self.params["dist_type"],
-                                       alpha=self.params["alpha"])
-        self.prepare_pairs()
-        # manually calculate threshold s_f_
-        self.s_f_ = manual_roc_score(
-            np.hstack((self._distances_true, self._distances_false)),
-            self._ds_issame, self.params["fpr_threshold"])[0]
-        self.ir_with_distractors()
-        self.print_info()
-
     def prepare_pairs(self):
         self.pairs_true_ = []
         # compose true pairs
@@ -203,7 +187,7 @@ class IrBigData:
         distances_extra = distances_extra.flatten()
         self._distances_false = distances_extra[distances_extra != 0]
 
-        # add distractors in flase pairs
+        # add distractors to false pairs
         if self.params['protocol'] == 'data_distractors_in_false_pairs':
             self._distances_false = np.hstack(
                 (self._distances_false, self._distances_distractors.flatten()))
@@ -216,9 +200,6 @@ class IrBigData:
         assert len(self.data) == len(self.labels)
         assert isinstance(self.data, np.ndarray)
 
-#         if isinstance(self.distractors, np.ndarray):
-#             assert len(self.distractors) == len(self.distractor_features)
-
     def ir_with_distractors(self, s_f=None, extra_info=True):
         CMT = 0
         self.disturbed_distractors_ = []
@@ -227,7 +208,7 @@ class IrBigData:
         if not s_f:
             s_f_ = self.s_f_
 
-        for index, pair in tqdm(enumerate(self.pairs_true_)):
+        for index, pair in enumerate(self.pairs_true_):
             if self.params["protocol"] == "data_no_distractors":
                 condition_1 = True
             else:
@@ -249,12 +230,23 @@ class IrBigData:
                                                               pair[0]]
         CMT /= len(self.pairs_true_)
         self.CMT_ = CMT
+        self.VR_ = (len(self.pairs_true_) - len(self.pairs_false_threshold_)) / len(self.pairs_true_)
 
     def print_info(self):
         print("id rate =", self.CMT_)
-        print("id rate no distractors =",
-              (len(self.pairs_true_) - len(self.pairs_false_threshold_)) / len(
-                  self.pairs_true_))
-        print("id rate only distractors =",
-              (len(self.pairs_true_) - len(
-                  self.pairs_false_distractors_)) / len(self.pairs_true_))
+        print("id rate no distractors =", self.VR_)
+        print("id rate only distractors =", 
+              (len(self.pairs_true_) - len(self.pairs_false_distractors_)) / len(self.pairs_true_))
+
+    def main(self):
+        self.inv_dict_ = calculate_inv_dict(self.labels)
+        # get distances (similarity) between points
+        self.get_distances_transformed(alpha=self.params["alpha"])
+        self.prepare_pairs()
+        # manually calculate threshold s_f_
+        self.s_f_ = manual_roc_score(
+            np.hstack((self._distances_true, self._distances_false)),
+            self._ds_issame, self.params["fpr_threshold"])[0]
+        self.ir_with_distractors()
+        if self._print_info:
+            self.print_info()

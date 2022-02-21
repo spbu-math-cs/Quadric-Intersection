@@ -5,6 +5,21 @@ from sklearn.preprocessing import normalize
 import pickle 
 import os
 import argparse
+import json
+from tqdm import tqdm
+
+
+def preprocess_cplfw(embeddings):
+    """Discard outliers from cplfw datatset"""
+    with open('image_embeddings/labels/cplfw_labels_full.txt', encoding='utf-8') as txt_labels_file:
+        lines = txt_labels_file.readlines()
+    cplfw_full_labels = np.array([i.rstrip('\n') for i in lines])
+
+    with open('image_embeddings/labels/cplfw_outliers_labels.json') as json_file:
+        outliers = np.array(json.load(json_file))
+    ind = (1 - np.in1d(cplfw_full_labels, outliers)).astype(bool)
+    
+    return embeddings[ind]
 
 
 def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
@@ -27,12 +42,11 @@ def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
         return np.linalg.norm(embs, axis=1)
 
     
-if __name__ == 'main':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--shuffle",
-                        type=bool,
-                        default=True,
-                        help='Set False for IR calculation, True for ood test')                        
+                        action='store_true',
+                        help='Usethis flag for ood test')                        
     parser.add_argument("--datasets",
                         nargs='+',
                         default=None,
@@ -56,12 +70,8 @@ if __name__ == 'main':
         
     proportion_of_outliers = config_dict['proportion_of_outliers']
     n_experiments = config_dict['n_experiments']
-
-#     indices_full = np.arange(6000000)
-#     np.random.shuffle(indices_full)
     
     outliers = np.load('image_embeddings/cplfw_anime_outliers.npy')
-    
     emb_list = {ds: np.load('image_embeddings/'+ds+'.npy')
                 for ds in args.datasets}
     
@@ -69,9 +79,14 @@ if __name__ == 'main':
         n_emb_experiment = int(len(outliers) / proportion_of_outliers * n_experiments)
         emb_list = {key: value[np.random.choice(len(value), n_emb_experiment)]
                    for key, value in emb_list.items()}
+        if 'cplfw' in emb_list.keys():
+            emb_list['cplfw'] = preprocess_cplfw(emb_list['cplfw'])
     
-    for dataset_name, embeddings in emb_list.items():
-        print('Calculate features for {} dataset'.format(dataset_name))
+    emb_list['outliers'] = outliers
+    
+    pbar = tqdm(emb_list.items())
+    for dataset_name, embeddings in pbar:
+        pbar.set_description(dataset_name)        
         dir_dataset = dir_features + '/' + dataset_name
         if 'quadrics' in args.methods:
             pass

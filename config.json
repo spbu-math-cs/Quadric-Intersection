@@ -12,7 +12,7 @@
                   "distance": "alg"
                 },
     "OneClassSVM": {
-                  "n_points": 800,
+                  "n_points": 2000,
                   "kernel": "poly",
                   "degree": 3
                    },
@@ -24,8 +24,8 @@
     },
   "test_params": {
                   "normalize": 1,
-                  "n_experiments": 10,
-                  "proportion_of_outliers":0.01
+                  "n_experiments":5,
+                  "proportion_of_outliers": 0.01
                   },
   "models_to_calculate": ["quadrics", "OneClassSVM", "PCA", "norms"],
   "datasets_to_calculate": ["megaface", "flickr"],
