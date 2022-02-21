@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--methods",
                         nargs='+',
-                        default=None,
+                        default=['OneClassSVM', 'PCA'],
                         help='Set empty to calculate all methods from config file') 
     args = parser.parse_args()
 
@@ -60,6 +60,10 @@ if __name__ == '__main__':
 
     if 'quadrics' in methods:
         print('Quadrics with type-2 distance training...')
+        if config_dict['quadrics']['n_points'] == 'all':
+            embs_indices = shuffle_indices
+        else:
+            embs_indices = shuffle_indices[:config_dict['quadrics']['n_points']]
         n_quadrics = config_dict["quadrics"]["n_quadrics"]
         distance = config_dict['quadrics']['distance']
         lr = config_dict['quadrics']['lr']
@@ -83,3 +87,35 @@ if __name__ == '__main__':
                 val_data=val_dataset)
         clf.save(dir_models+'/Quadrics.pth')
         print('Model saved to '+dir_models+'/Quadrics.pth')
+
+    if "quadrics_algebraic" in methods:
+        print('Quadrics with algebraic distance training...')
+        if config_dict['quadrics_algebraic']['n_points'] == 'all':
+            embs_indices = shuffle_indices
+        else:
+            embs_indices = shuffle_indices[:config_dict['quadrics_algebraic']['n_points']]
+        n_quadrics = config_dict["quadrics_algebraic"]["n_quadrics"]
+        distance = 'dist0'
+        lr = config_dict['quadrics_algebraic']['lr']
+        n_epoch = config_dict['quadrics_algebraic']['n_epoch']
+        device = config_dict['quadrics_algebraic']['device']
+        batch_size = config_dict['quadrics_algebraic']['batch_size']
+        val_size = config_dict['quadrics_algebraic']['val_size']
+        
+        clf = Quadrics(n_quadrics=n_quadrics, dist=distance, device=device)
+        if val_size > 0:
+            train_size = len(embeddings) - val_size
+            assert train_size > 0, "Validation size bigger than total length!!!"
+            val_dataset = embeddings[train_size:(train_size + val_size), :]
+            train_dataset = embeddings[:train_size, :]
+        else:
+            train_dataset = embeddings
+            val_dataset = None 
+        clf.fit(train_dataset, 
+                n_epoch, 
+                learning_rate=lr, 
+                batch_size=batch_size, 
+                val_data=val_dataset)
+        clf.save(dir_models+'/Quadrics_algebraic.pth')
+        print('Model saved to '+dir_models+'/Quadrics_algebraic.pth')
+        
