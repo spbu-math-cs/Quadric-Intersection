@@ -33,7 +33,7 @@ The examples folder contain Jupyter notebooks with the following examples:
 
 ## Data
 For downloading dataset embeddings follow the next link and put file to the project folder:
-https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing
+[Embeddings Archive](https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing)
 This archive contains resnet-50 network with ArcFace loss embeedings for given datasets:
 
 - `MS1M-ArcFace`
@@ -43,7 +43,7 @@ This archive contains resnet-50 network with ArcFace loss embeedings for given d
 - `flickr`
 - `cplfw and anime outliers`
 
-and initial images you may find there: [GitHub Pages](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you. may find them in file `image_embeddings/labels/cplfw_outliers_labels.json`) and anime images.
+and initial images you may find there: [Image Datasets](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you. may find them in file `image_embeddings/labels/cplfw_outliers_labels.json`) and anime images.
 
 To extract archive and to prepare folders for future calculation execute next file:
 
