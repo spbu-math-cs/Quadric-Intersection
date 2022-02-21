@@ -13,6 +13,7 @@ You will need python 3.6+ and the following packages
 - `matplotlib` for graphs plotting in notebooks with examples
 - `tqdm`
 - `scipy` for Seam_line_exaple notebook
+- `pandas` for tables building
 
 
 ## Quadric models
@@ -27,18 +28,18 @@ You will need python 3.6+ and the following packages
 The examples folder contain Jupyter notebooks with the following examples:
 
 - `Seam_line_example`: a toy example of approximation of the tennis ball seam line using quadrics
-- `ir_toy_example`: TODO: write description
+- `IR_full`: identification rate calculation for cplfw dataset with megaface distractors, with different methods features calculation  
+- `ood_test`: out-of-distribution test, find distance between of outliers and given datasets features distribution in roc-auc score metric
 
 ## Data
-Out-of-disttribution 
+Out-of-distribution 
 For downloading dataset embeddings follow the next link and put file to the project folder:
-- https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing
-To extract archive and to prepare folders for future calculation executet ext file:
-TODO: write about datasets
-      link to initial datasets
-      few words about network
-      .sh file for extracting tar.gz file, folders for models and features 
-      in 
+https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing
+To extract archive and to prepare folders for future calculation execute next file:
+
+- `./prepare_folders.sh`
+
+Initial images dataset you may find there: https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_ . To get final embeddings resnet-50 nettwork with ArcFace loss was used. For ood tests we provide embeddings datatset of  Also, in `image_embeddings/labels/cplfw_outliers_labels.json` you may find cplfw outliers images detected by eyes. 
 
 ## Citation
 ```
