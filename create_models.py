@@ -76,4 +76,10 @@ if __name__ == '__main__':
         else:
             train_dataset = embeddings
             val_dataset = None 
-        clf.fit(train_dataset, n_epoch, learning_rate=lr, batch_size=batch_size, val_data=val_dataset)
+        clf.fit(train_dataset, 
+                n_epoch, 
+                learning_rate=lr, 
+                batch_size=batch_size, 
+                val_data=val_dataset)
+        clf.save(dir_models+'/Quadrics.pth')
+        print('Model saved to '+dir_models+'/Quadrics.pth')

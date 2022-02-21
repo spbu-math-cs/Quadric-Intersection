@@ -33,6 +33,7 @@ class Trainer:
         self.start_epoch = start_epoch
         self.device = device
         self.lam = lam
+        self.vebrose = vebrose
         self.logger = Logger(start_epoch=start_epoch, print_every=vebrose)
         self.train_loader = DataLoader(PointsDataset(data),
                                        batch_size=self.batch_size,
@@ -64,7 +65,11 @@ class Trainer:
         self.optimizer.step()
 
     def train_epoch(self):
-        for points in self.train_loader:
+        if self.vebrose==1:
+            loader = tqdm(self.train_loader)
+        else:
+            loader = self.train_loader
+        for points in loader:
             q, p = points
             q = q.to(self.device)
             p = p.to(self.device)
@@ -100,7 +105,7 @@ class Trainer:
                 p = p.to(self.device)
                 loss_accum.append(np.mean(self.get_dists((q, p)).detach().cpu().numpy()))
             mean_loss = np.mean(loss_accum)
-            self.logger.print('Mean val distance', mean_loss)
+            self.logger.print(f'Mean val distance {mean_loss}')
         return mean_loss
 
     
