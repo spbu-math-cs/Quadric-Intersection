@@ -1,6 +1,6 @@
 # Quadric hypersurface intersection for manifold learning in feature space
 
-This repository contains a PyTroch implementation of the algorithm presented in the paper Quadric hypersurface intersection for manifold learning in feature space
+This repository contains a PyTorch implementation of the algorithm presented in the paper Quadric hypersurface intersection for manifold learning in feature space
 [https://arxiv.org/abs/2102.06186](https://arxiv.org/abs/2102.06186)
 
 ## Prerequisites
