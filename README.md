@@ -49,6 +49,23 @@ To extract archive and to prepare folders for future calculation execute .sh fil
 
 - `./prepare_folders.sh`
 
+
+## Scripts
+
+Use `create_models.py` script for fiting manifolds. With default parameters it will fit `OneClassSVM` and `PCA` methods.
+
+For fiting `quadrics` with second order distance use the following command:
+```
+python create_models.py --methods quadrics
+```
+
+For fiting `quadrics` with algebraic distance use the following command:
+```
+python create_models.py --methods quadrics_algebraic
+```
+
+Warning! quadrics fiting needs much time.
+
 ## Citation
 ```
 @article{pavutnitskiy2021quadric,
