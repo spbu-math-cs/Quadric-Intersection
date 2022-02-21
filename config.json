@@ -6,7 +6,8 @@
                   "n_quadrics": 300,
                   "distance": "dist2",
                   "lr": 0.1,
-                  "n_epoch": 50
+                  "n_epoch": 50,
+                  "device": "gpu"
                 },
     "quadrics_algebraic": {
                   "n_points": 80000,
