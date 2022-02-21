@@ -7,7 +7,9 @@
                   "distance": "dist2",
                   "lr": 0.1,
                   "n_epoch": 50,
-                  "device": "gpu"
+                  "device": "gpu",
+                  "batch_size": 32,
+                  "val_size": 5000
                 },
     "quadrics_algebraic": {
                   "n_points": 80000,
