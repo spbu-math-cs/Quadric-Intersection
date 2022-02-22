@@ -7,7 +7,7 @@ import json
 import pickle
 import os
 
-from quadrics.quadrics_wrapper import Quadrics
+from quadrics import Quadrics
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

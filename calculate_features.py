@@ -8,7 +8,7 @@ import argparse
 import json
 from tqdm import tqdm
 
-from quadrics.quadrics_wrapper import Quadrics
+from quadrics import Quadrics
 
 
 def preprocess_cplfw(embeddings):
