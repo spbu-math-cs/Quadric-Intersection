@@ -7,7 +7,7 @@ from math import sqrt
 def build_quadratic_monoms_batch(points):
     monoms = []
     for i in range(points.size()[1]):
-        cur_monoms = points[:, i:] * points[:, i]
+        cur_monoms = points[:, i:] * points[:, i].unsqueeze(1)
         monoms.append(cur_monoms)
     return torch.cat(monoms, dim=1)
 
@@ -178,6 +178,7 @@ class HSQuadricsModel(nn.Module):
         l_coefs = params['linear']
         free_coefs = params['free']
         q_coefs /= self.coef_trans
+        q_coefs = q_coefs.to(l_coefs.get_device())
         q_coefs = q_coefs.detach()
         free_coefs = free_coefs.detach()
         l_coefs = l_coefs.detach()
