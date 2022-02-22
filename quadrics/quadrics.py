@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from quadrics.model import HSQuadricsModel
 from quadrics.trainer import Trainer
 
@@ -27,25 +28,42 @@ class Quadrics:
         if device == 'cpu':
             self.device = torch.device('cpu')
 
-    def get_distances(self, point, dist=None):
+    def get_distances(self, point, dist=None, batch_size=32):
         """
         Compute distance from point to quadrics
         Parameters:
-            point: ndarray with point coordinates
+            point: ndarray with point coordinates or batch of points
             dist: type of distance to use. If None the default distance from __init__ will be used
         Returns:
             ndarray with distances to each quadric
         """
         assert dist in [None, 'dist2', 'dist2_full', 'dist1', 'dist0']
         assert self.model is not None
-        assert len(point) == self.model.dim
+
         if dist is None:
             dist = self.dist
-        point = torch.from_numpy(point.astype('float32')).unsqueeze(0).to(self.device)
-        with torch.no_grad():
-            r = self.model(point, dist=dist).detach().cpu().squeeze(0).numpy()
-        return r
 
+        if len(point.shape) == 1:
+            assert len(point) == self.model.dim
+        
+            point = torch.from_numpy(point.astype('float32')).unsqueeze(0).to(self.device)
+            with torch.no_grad():
+                r = self.model(point, dist=dist).detach().cpu().squeeze(0).numpy()
+            return r
+        if len(point) == 2:
+            assert point.shape[1] == self.model.dim
+            if point.shape[0] % batch_size == 0:
+                N_steps = point.shape[0] // batch_size
+            else:
+                N_steps = point.shape[0] // batch_size + 1
+            r = []
+            with torch.no_grad():
+                for i in range(N_steps):
+                    batch = torch.from_numpy(point[i*batch_size:(i+1)*batch_size].astype('float32')).to(self.device)
+                    scores = self.model(batch, dist=dist).detach().cpu().numpy()
+                    r.append(scores)
+            return np.concatenate(r, axis=0)
+    
     def load(self, path):
         self.model = HSQuadricsModel(self.n_quadrics)
         self.model.load(path, map_location=self.device)

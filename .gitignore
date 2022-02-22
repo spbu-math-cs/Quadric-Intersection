@@ -1,5 +1,9 @@
 .idea
 
+# Big files
+image_embeddings/
+models/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
