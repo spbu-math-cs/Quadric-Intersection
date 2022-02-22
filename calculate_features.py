@@ -8,6 +8,8 @@ import argparse
 import json
 from tqdm import tqdm
 
+from quadrics.quadrics_wrapper import Quadrics
+
 
 def preprocess_cplfw(embeddings):
     """Discard outliers from cplfw datatset"""
@@ -27,8 +29,6 @@ def get_dist(model, model_type, embs, normalize_emb=True, extra_params=None):
     if normalize_emb and model_type != 'norms':
         embs = normalize(embs)
 
-    if model_type == 'quadrics':
-        pass
     if model_type == 'OneClassSVM':
         return - model.score_samples(embs)
     if model_type == 'KPCA':
@@ -89,9 +89,15 @@ if __name__ == '__main__':
         pbar.set_description(dataset_name)        
         dir_dataset = dir_features + '/' + dataset_name
         if 'quadrics' in args.methods:
-            pass
+            clf = Quadrics(dist='dist2', device='gpu')
+            clf.load(dir_models + '/Quadrics.pth')
+            dist = clf.get_distances(embeddings, dist='dist2')
+            np.save(dir_dataset + '/Quadrics.npy')
         if 'quadrics_alg' in args.methods:
-            pass
+            clf = Quadrics(dist='dist0', device='gpu')
+            clf.load(dir_models + '/Quadrics_algebraic.pth')
+            dist = clf.get_distances(embeddings, dist='dist0')
+            np.save(dir_dataset + '/Quadrics_algebraic.npy')
         if 'OneClassSVM' in args.methods:
             clf = pickle.load(open(dir_models + '/OneClassSVM.pickle', 'rb'))
             dist = get_dist(clf, 'OneClassSVM', embeddings, config_dict['normalize'])
