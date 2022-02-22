@@ -1,6 +1,6 @@
 # Quadric hypersurface intersection for manifold learning in feature space
 
-This repository contains a PyTroch implementation of the algorithm presented in the paper Quadric hypersurface intersection for manifold learning in feature space
+This repository contains a PyTorch implementation of the algorithm presented in the paper Quadric hypersurface intersection for manifold learning in feature space
 [https://arxiv.org/abs/2102.06186](https://arxiv.org/abs/2102.06186)
 
 ## Prerequisites
@@ -12,7 +12,7 @@ You will need python 3.6+ and the following packages
 - `sklearn 0.24.2` if you need kernel models
 - `matplotlib` for graphs plotting in notebooks with examples
 - `tqdm`
-- `scipy` for Seam_line_exaple notebook
+- `scipy` for Seam_line_exapmle notebook
 - `pandas` for tables building
 
 
