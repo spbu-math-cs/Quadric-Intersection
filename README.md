@@ -55,7 +55,7 @@ It was constructed by human-selecting the outliers from CPLFW (they can be found
 
 Pre-trained quadric models (with parameters from `config.json`) may be downloaded [here](https://drive.google.com/file/d/1Ozlh6QAPyyhUdKMyww4cdDy54dBCab7u/view?usp=sharing). 
 
-To extract archive and to prepare folders for models and features calculation execute .sh file:
+To extract the archive and to prepare the folders for the models and features calculation execute .sh file:
 
 - `./prepare_folders.sh`
 
