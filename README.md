@@ -62,14 +62,14 @@ To extract the archive and to prepare the folders for the models and features ca
 
 ## Scripts
 
-Use `create_models.py` script for fiting manifolds. With default parameters it will fit `OneClassSVM` and `PCA`.
+Use `create_models.py` script to fit the manifolds. With default parameters it will fit `OneClassSVM` and `PCA`.
 
-For fiting `quadrics` with second order distance use the following command:
+For fiting `quadrics` with the second order distance use the following command:
 ```
 python create_models.py --methods quadrics
 ```
 
-For fiting `quadrics` with algebraic distance use the following command:
+For fiting `quadrics` with the algebraic distance use the following command:
 ```
 python create_models.py --methods quadrics_algebraic
 ```
