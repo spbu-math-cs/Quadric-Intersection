@@ -26,7 +26,7 @@ You will need Python 3.6+ and the following packages:
 The folder named `quadrics` contains an implementation of quadric intersection manifold:
 
 - `model.py` is the implementation of quadrics as `torch.nn.Module`,
-- `quadrics_wrapper` is a wrapper with `sklearn`-like interface (including trainer implementation).
+- `quadrics.py` is a wrapper with `sklearn`-like interface (including trainer implementation).
 
 ## Examples
 
