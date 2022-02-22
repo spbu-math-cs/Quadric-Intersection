@@ -33,8 +33,8 @@ The folder named `quadrics` contains an implementation of quadric intersection m
 The folder named `examples` contains Jupyter notebooks with the following examples.
 
 - `toy_example.ipynb`: approximating the seam line of a tennis ball using an intersection of two quadrics.
-- `similarity_robustification.ipynb`: demostration and comparison of different similarity robustification methods.
-- `outlier_detection.ipynb`: demostration and comparison of different outlier detection methods.
+- `similarity_robustification.ipynb`: demonstration and comparison of different similarity robustification methods.
+- `outlier_detection.ipynb`: demonstration and comparison of different outlier detection methods.
 
 ## Data
 To download precomputed ArcFace embeddings follow [this link](https://drive.google.com/file/d/1o7uUkkbIvHKEMSAcQV9rs9L0HUkY7dsh/view?usp=sharing).
