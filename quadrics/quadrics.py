@@ -50,7 +50,7 @@ class Quadrics:
             with torch.no_grad():
                 r = self.model(point, dist=dist).detach().cpu().squeeze(0).numpy()
             return r
-        if len(point) == 2:
+        if len(point.shape) == 2:
             assert point.shape[1] == self.model.dim
             if point.shape[0] % batch_size == 0:
                 N_steps = point.shape[0] // batch_size
@@ -63,6 +63,8 @@ class Quadrics:
                     scores = self.model(batch, dist=dist).detach().cpu().numpy()
                     r.append(scores)
             return np.concatenate(r, axis=0)
+        else:
+            raise ValueError('point must be ndarray of dim 1 or 2')
     
     def load(self, path):
         self.model = HSQuadricsModel(self.n_quadrics)
