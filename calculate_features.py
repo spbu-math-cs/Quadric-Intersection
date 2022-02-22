@@ -91,12 +91,12 @@ if __name__ == '__main__':
         if 'quadrics' in args.methods:
             clf = Quadrics(dist='dist2', device='gpu')
             clf.load(dir_models + '/Quadrics.pth')
-            dist = clf.get_distances(embeddings, dist='dist2')
+            dist = clf.get_distances(embeddings, dist='dist2', batch_size=257)
             np.save(dir_dataset + '/Quadrics.npy')
         if 'quadrics_alg' in args.methods:
             clf = Quadrics(dist='dist0', device='gpu')
             clf.load(dir_models + '/Quadrics_algebraic.pth')
-            dist = clf.get_distances(embeddings, dist='dist0')
+            dist = clf.get_distances(embeddings, dist='dist0', batch_size=257)
             np.save(dir_dataset + '/Quadrics_algebraic.npy')
         if 'OneClassSVM' in args.methods:
             clf = pickle.load(open(dir_models + '/OneClassSVM.pickle', 'rb'))
