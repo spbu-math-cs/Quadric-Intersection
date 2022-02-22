@@ -41,11 +41,13 @@ This archive contains resnet-50 network with ArcFace loss embeedings for given d
 - `cplfw`
 - `calfw`
 - `flickr`
-- `cplfw outliers and anime pictures`
+- `cplfw outliers and anime faces`
 
 which you may find there: [Image Datasets](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets_). Besides standard datasets for out-of distribution calculation we used hand-crafted embedding dataset `cplfw and anime outliers` got from detected by eyes outliers from cplfw (you may find them in file `labels/cplfw_outliers_labels.json`, notation corresponds to `labels/cplfw_labels_full.txt`) and anime faces [Anime-face-dataset](https://github.com/bchao1/Anime-Face-Dataset).
 
-To extract archive and to prepare folders for future calculation execute .sh file:
+Also quadrics models trained with parameters from `config.json` file you may find there: [Qudrics Models](https://drive.google.com/file/d/1Ozlh6QAPyyhUdKMyww4cdDy54dBCab7u/view?usp=sharing). 
+
+To extract archive and to prepare folders for models and features calculation execute .sh file:
 
 - `./prepare_folders.sh`
 
