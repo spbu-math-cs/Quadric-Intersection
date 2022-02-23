@@ -13,4 +13,4 @@ if [ ! -d "$dir_quadrics" ]; then
 fi
 mv quadrics_models/300_ms1m_new_48.pth models/Quadrics.pth
 mv quadrics_models/30_ms1m_80k_1000.pth models/Quadrics_algebraic.pth
-rm $dir_quadrics
+rm quadrics_models
